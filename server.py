@@ -34,10 +34,20 @@ def check_balance():
         if exchange_id == "mexc":
             exchange.urls['api'] = "https://api.mexc.com"
 
+        # Fetch balance
         balance = exchange.fetch_balance()
-        return jsonify({"success": True, "balance": balance})
-    
+
+        # Debug: Print API response for testing
+        print("Fetched Balance:", balance)
+
+        # Ensure response is a dictionary before returning
+        if isinstance(balance, dict):
+            return jsonify({"success": True, "balance": balance})
+        else:
+            return jsonify({"error": "Unexpected API response format"}), 500
+
     except Exception as e:
+        print("API Error:", str(e))  # Debugging
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
